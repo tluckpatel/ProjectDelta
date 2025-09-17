@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Project Delta – Auth POC</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="home">
+    <!-- Outside brand, centered above the glass box -->
+    <button class="megaBrand" id="homeBtn" aria-label="Go to Home">
+        <div class="logo">Δ</div>
+        <div class="brandname">Project Delta</div>
+    </button>
+
+    <div class="frame" id="frame">
+        <!-- Landing hero -->
+        <div class="hero" id="hero">
+            <h1 class="company" id="companyTitle">Your Company Name</h1>
+            <p class="tagline">Modern authentication with smooth transitions and real-time validation.</p>
+            <button class="ctaHero" id="startBtn">Get started</button>
+        </div>
+
+        <!-- Auth stage -->
+        <div class="stage" aria-live="polite">
+            <div class="leftPane">
+                <div class="leftInner">
+                    <h2 id="leftTitle">Your Company Name</h2>
+                    <p id="leftText">Welcome back — sign in to continue.</p>
+                    <div class="shapes">
+                        <div class="shape"></div>
+                        <div class="shape s2"></div>
+                        <div class="shape s3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rightPane">
+                <!-- SIGN IN -->
+                <form class="panel" id="signIn">
+                    <h3>User login</h3>
+                    <p class="sub">Enter your credentials to continue.</p>
+
+                    <div class="field">
+                        <label for="siEmail">Email address</label>
+                        <input id="siEmail" type="email" class="input" placeholder="you@example.com"
+                            autocomplete="email" inputmode="email" required />
+                        <span id="siEmailErr" class="error-message" aria-live="polite"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="siPass">Password</label>
+                        <input id="siPass" type="password" class="input" placeholder="••••••••"
+                            autocomplete="current-password" required />
+                        <span id="siPassErr" class="error-message" aria-live="polite"></span>
+                    </div>
+
+                    <button class="btn is-disabled" id="signInBtn" type="submit" disabled>Sign in now</button>
+
+                    <div class="actions">
+                        <a href="#" class="link">Lost your password?</a>
+                    </div>
+
+                    <div class="swap">
+                        Don’t have an account?
+                        <a href="#" class="link" id="toSignUp">Sign up</a>
+                    </div>
+                </form>
+
+                <!-- SIGN UP -->
+                <form class="panel" id="signUp" hidden>
+                    <div class="panelHeader vertical">
+                        <h3>Create your account</h3>
+                        <span class="account-text">
+                            Already have an account? <a href="#" id="toSignInTop" class="link">Sign in</a>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <div class="field">
+                            <label for="fn">First name</label>
+                            <input id="fn" class="input" autocomplete="given-name" required />
+                            <span id="fnErr" class="error-message" aria-live="polite"></span>
+                        </div>
+                        <div class="field">
+                            <label for="ln">Last name</label>
+                            <input id="ln" class="input" autocomplete="family-name" required />
+                            <span id="lnErr" class="error-message" aria-live="polite"></span>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="company">Company name</label>
+                        <input id="company" class="input" autocomplete="organization" required />
+                        <span id="companyErr" class="error-message" aria-live="polite"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="suEmail">Email address</label>
+                        <input id="suEmail" type="email" class="input" autocomplete="email" inputmode="email"
+                            required />
+                        <span id="suEmailErr" class="error-message" aria-live="polite"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="phone">Phone number</label>
+                        <input id="phone" class="input" autocomplete="tel" inputmode="numeric"
+                            placeholder="Digits only" />
+                        <span id="phoneErr" class="error-message" aria-live="polite"></span>
+                    </div>
+
+                    <div class="field">
+                        <label for="pw1">Password</label>
+                        <input id="pw1" class="input" type="password" placeholder="At least 8 characters" required />
+                        <div class="checklist" id="pwChecklist" aria-live="polite">
+                            <div class="rule" data-rule="length"><span class="icon bad">✗</span> At least 8 characters
+                            </div>
+                            <div class="rule" data-rule="upper"><span class="icon bad">✗</span> Contains an uppercase
+                                letter (A–Z)</div>
+                            <div class="rule" data-rule="lower"><span class="icon bad">✗</span> Contains a lowercase
+                                letter (a–z)</div>
+                            <div class="rule" data-rule="digit"><span class="icon bad">✗</span> Contains a number (0–9)
+                            </div>
+                            <div class="rule" data-rule="special"><span class="icon bad">✗</span> Contains a special
+                                character (!@#$% etc.)</div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="pw2">Confirm password</label>
+                        <input id="pw2" class="input" type="password" placeholder="Repeat password" required />
+                        <span id="pw2Error" class="error-message"></span>
+                    </div>
+
+                    <div class="submitRow">
+                        <button id="signUpBtn" class="btn" type="submit" disabled>Create account</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
