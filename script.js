@@ -1,3 +1,13 @@
+// ===== MSAL CONFIG =====
+const msalConfig = {
+  auth: {
+    clientId: "a1c3f9fb-01d3-447e-a263-e4c754acc353",   // from App registration Overview
+    authority: "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/B2C_1_signup_signin/v2.0/",
+    redirectUri: "https://tluckpatel.neocities.org/"
+  }
+};
+const msalInstance = new msal.PublicClientApplication(msalConfig);
+
 // ====== NAV / STAGE TOGGLE ======
 const body = document.body;
 const startBtn = document.getElementById('startBtn');
@@ -29,15 +39,11 @@ toSignIn?.addEventListener('click', () => show('in'));
 toSignInTop?.addEventListener('click', () => show('in'));
 
 // ====== SHARED HELPERS (sanitization & validators) ======
-const sanitize = (v) => (v || '').replace(/[<>\u0000-\u001F]/g, '').trim();           // strip < > & control chars
+const sanitize = (v) => (v || '').replace(/[<>\u0000-\u001F]/g, '').trim();
 const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 const isValidSiPassword = (v) => (v || '').length >= 8;
-
-// Names: letters, spaces, dots, apostrophes, hyphens (2–50)
 const isValidName = v => /^[A-Za-z][A-Za-z .'-]{1,49}$/.test(v);
-// Company: letters, numbers, spaces, ., &, ', -  (2–100)
 const isValidCompany = v => /^[A-Za-z0-9][A-Za-z0-9 .&'-]{1,99}$/.test(v);
-// Phone: digits only; 7–15 digits
 const toDigits = v => (v || '').replace(/\D/g, '');
 const isValidPhone = v => /^\d{7,15}$/.test(v);
 
@@ -52,7 +58,7 @@ function validateSignIn() {
   const e = sanitize(siEmail?.value);
   const p = sanitize(siPass?.value);
 
-  if (siEmail && siEmail.value !== e) siEmail.value = e;   // keep sanitized
+  if (siEmail && siEmail.value !== e) siEmail.value = e;
   if (siPass && siPass.value !== p) siPass.value = p;
 
   const emailOK = isValidEmail(e);
@@ -67,7 +73,7 @@ function validateSignIn() {
   const ready = emailOK && passOK;
   if (signInBtn) {
     signInBtn.disabled = !ready;
-    signInBtn.classList.toggle('is-disabled', !ready); // blur/disable style
+    signInBtn.classList.toggle('is-disabled', !ready);
   }
 }
 
@@ -81,17 +87,22 @@ signIn?.addEventListener('submit', (e) => {
     signInBtn?.classList.add('shake'); setTimeout(() => signInBtn?.classList.remove('shake'), 350);
     return;
   }
-  e.preventDefault(); alert('POC: Sign in clicked');
+  e.preventDefault();
+  msalInstance.loginPopup({ scopes: ["openid", "profile", "email"] })
+    .then(result => {
+      const account = result.account;
+      leftText.textContent = `Welcome ${account.username}`;
+    })
+    .catch(err => console.error(err));
 });
 
 // ====== SIGN-UP VALIDATION (password rules + fields) ======
-const pw1 = document.getElementById('pw1');               // password
-const pw2 = document.getElementById('pw2');               // confirm
+const pw1 = document.getElementById('pw1');
+const pw2 = document.getElementById('pw2');
 const pw2Error = document.getElementById('pw2Error');
 const checklist = document.getElementById('pwChecklist');
 const signUpBtn = document.getElementById('signUpBtn');
 
-// sign-up fields
 const fn = document.getElementById('fn');
 const ln = document.getElementById('ln');
 const company = document.getElementById('company');
@@ -122,7 +133,6 @@ function setRule(rule, ok) {
 }
 
 function validateSignUp() {
-  // sanitize + read fields
   const first = sanitize(fn?.value);
   const last = sanitize(ln?.value);
   const comp = sanitize(company?.value);
@@ -137,12 +147,11 @@ function validateSignUp() {
   const ph = toDigits(phRaw);
   if (phone && phRaw !== ph) phone.value = ph;
 
-  // field validity
   const nameOK = isValidName(first);
   const lastOK = isValidName(last);
   const compOK = isValidCompany(comp);
   const emailOK = isValidEmail(em);
-  const phoneOK = !ph ? true : isValidPhone(ph); // optional; if filled, must be 7–15 digits
+  const phoneOK = !ph ? true : isValidPhone(ph);
 
   fn?.classList.toggle('error', !nameOK && !!first);
   ln?.classList.toggle('error', !lastOK && !!last);
@@ -156,7 +165,6 @@ function validateSignUp() {
   suEmailErr && (suEmailErr.textContent = (!emailOK && em) ? 'Please enter a valid email address.' : '');
   phoneErr && (phoneErr.textContent = (!phoneOK && ph) ? 'Digits only (7–15).' : '');
 
-  // password rule checks
   const v1 = pw1?.value || '';
   const v2 = pw2?.value || '';
   const ok = {
@@ -169,23 +177,17 @@ function validateSignUp() {
   Object.entries(ok).forEach(([k, v]) => setRule(k, v));
   const allPwRules = Object.values(ok).every(Boolean);
 
-  // checklist visible until all pass
-  // checklist: mark valid; only hide when all rules pass.
-  // Do NOT auto-show here — we only show it on focus/input.
   if (checklist) {
     checklist.classList.toggle('valid', allPwRules);
     if (allPwRules) checklist.classList.remove('show');
   }
 
-
-  // confirm match feedback
   const matches = checks.match(v1, v2);
   if (pw2) {
     if (v2 && !matches) { pw2.classList.add('error'); pw2Error && (pw2Error.textContent = 'Password does not match'); }
     else { pw2.classList.remove('error'); pw2Error && (pw2Error.textContent = ''); }
   }
 
-  // enable/disable Create account
   const allOK = nameOK && lastOK && compOK && emailOK && phoneOK && allPwRules && matches;
   if (signUpBtn) {
     signUpBtn.disabled = !allOK;
@@ -193,12 +195,10 @@ function validateSignUp() {
   }
 }
 
-// checklist show/hide while typing password
 pw1?.addEventListener('focus', () => checklist?.classList.add('show'));
 pw1?.addEventListener('input', () => { checklist?.classList.add('show'); validateSignUp(); });
 pw1?.addEventListener('blur', () => { if (!pw1.value) checklist?.classList.remove('show'); });
 
-// revalidate on any sign-up field change
 ['input', 'blur'].forEach(evt => {
   fn?.addEventListener(evt, validateSignUp);
   ln?.addEventListener(evt, validateSignUp);
@@ -208,13 +208,18 @@ pw1?.addEventListener('blur', () => { if (!pw1.value) checklist?.classList.remov
   pw2?.addEventListener(evt, validateSignUp);
 });
 
-// Initialize states
 validateSignIn();
 validateSignUp();
 
-// Prevent real submits (POC)
+// ====== SIGN-UP SUBMIT ======
 signUp?.addEventListener('submit', e => {
   validateSignUp();
   if (signUpBtn?.disabled) { e.preventDefault(); return; }
-  e.preventDefault(); alert('POC: Account created');
+  e.preventDefault();
+  msalInstance.loginPopup({ scopes: ["openid", "profile", "email"] })
+    .then(result => {
+      const account = result.account;
+      leftText.textContent = `Welcome ${account.username}`;
+    })
+    .catch(err => console.error(err));
 });
