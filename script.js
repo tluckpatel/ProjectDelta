@@ -2,12 +2,13 @@
 // ===== MSAL CONFIG =====
 const msalConfig = {
   auth: {
-    clientId: "a1c3f9fb-01d3-447e-a263-e4c754acc353",   // from App Registration
-    authority: "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/B2B_1_signup_signin", 
-    knownAuthorities: ["tshanesimmonsgmailauth.ciamlogin.com"], // trust only your CIAM tenant
-    redirectUri: "https://tluckpatel.github.io/ProjectDelta/"   // GitHub Pages site
+    clientId: "a1c3f9fb-01d3-447e-a263-e4c754acc353",
+    authority: "https://tshanesimmonsgmailauth.ciamlogin.com/B2B_1_signup_signin", // <-- FIXED
+    knownAuthorities: ["tshanesimmonsgmailauth.ciamlogin.com"],
+    redirectUri: "https://tluckpatel.github.io/ProjectDelta/"
   }
 };
+
 
 const msalInstance = new msal.PublicClientApplication(msalConfig);
 
@@ -159,4 +160,5 @@ signUp?.addEventListener('submit', (e) => {
     })
     .catch(err => console.error(err));
 });
+
 
