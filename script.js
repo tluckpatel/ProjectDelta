@@ -1,20 +1,20 @@
 // ===== MSAL CONFIG =====
+// ===== MSAL CONFIG =====
 const msalConfig = {
   auth: {
-    clientId: "a1c3f9fb-01d3-447e-a263-e4c754acc353",  // 👈 from App Registration
-    authority: "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/v2.0",
-    knownAuthorities: ["tshanesimmonsgmailauth.ciamlogin.com"],
-    redirectUri: "https://tluckpatel.github.io/ProjectDelta/"  // 👈 update for GitHub Pages
+    clientId: "a1c3f9fb-01d3-447e-a263-e4c754acc353",   // from App Registration
+    authority: "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/B2B_1_signup_signin", 
+    knownAuthorities: ["tshanesimmonsgmailauth.ciamlogin.com"], // trust only your CIAM tenant
+    redirectUri: "https://tluckpatel.github.io/ProjectDelta/"   // GitHub Pages site
   }
 };
 
 const msalInstance = new msal.PublicClientApplication(msalConfig);
 
-// Tell MSAL which user flow (policy) to run
 const loginRequest = {
-  scopes: ["openid", "profile", "email"],
-  extraQueryParameters: { p: "B2B_1_signup_signin" }  // 👈 exact name of your user flow
+  scopes: ["openid", "profile", "email"]
 };
+
 
 // ====== NAV / STAGE TOGGLE ======
 const body = document.body;
@@ -159,3 +159,4 @@ signUp?.addEventListener('submit', (e) => {
     })
     .catch(err => console.error(err));
 });
+
