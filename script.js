@@ -3,11 +3,12 @@
 const msalConfig = {
   auth: {
     clientId: "a1c3f9fb-01d3-447e-a263-e4c754acc353",
-    authority: "https://tshanesimmonsgmailauth.ciamlogin.com/B2B_1_signup_signin", // <-- FIXED
+    authority: "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/B2B_1_signup_signin/v2.0",
     knownAuthorities: ["tshanesimmonsgmailauth.ciamlogin.com"],
-    redirectUri: "https://tluckpatel.github.io/ProjectDelta/"
+    redirectUri: "https://agreeable-flower-00cd2da0f.1.azurestaticapps.net"
   }
 };
+
 
 
 const msalInstance = new msal.PublicClientApplication(msalConfig);
@@ -160,5 +161,6 @@ signUp?.addEventListener('submit', (e) => {
     })
     .catch(err => console.error(err));
 });
+
 
 
