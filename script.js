@@ -1,35 +1,27 @@
 /*******************************
  * MSAL CONFIG — CIAM + B2B flow
  *******************************/
+// ===== MSAL CONFIG (authorityMetadata inside auth) =====
 const msalConfig = {
   auth: {
     clientId: "a1c3f9fb-01d3-447e-a263-e4c754acc353",
-
-    // Use the BASE v2.0 authority (no policy here)
-    authority: "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/v2.0",
-
+    authority: "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/B2B_1_signup_signin",
     knownAuthorities: ["tshanesimmonsgmailauth.ciamlogin.com"],
-
-    // Your Azure Static Web Apps URL
     redirectUri: "https://agreeable-flower-00cd2da0f.1.azurestaticapps.net",
 
-    // Pin metadata to avoid msal trying to read /.well-known (fixes CORS).
-    // If you ever rename the user-flow, update `B2B_1_signup_signin` in all endpoints below.
+    // IMPORTANT: no ?p=... on any of these endpoints
     authorityMetadata: JSON.stringify({
       "issuer": "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/B2B_1_signup_signin/v2.0/",
-      "authorization_endpoint": "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/oauth2/v2.0/authorize?p=B2B_1_signup_signin",
-      "token_endpoint":         "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/oauth2/v2.0/token?p=B2B_1_signup_signin",
-      "end_session_endpoint":   "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/oauth2/v2.0/logout?p=B2B_1_signup_signin",
-      "jwks_uri":               "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/discovery/v2.0/keys?p=B2B_1_signup_signin"
+      "authorization_endpoint": "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/oauth2/v2.0/authorize",
+      "token_endpoint":         "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/oauth2/v2.0/token",
+      "end_session_endpoint":   "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/oauth2/v2.0/logout",
+      "jwks_uri":               "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/discovery/v2.0/keys"
     })
-  },
-  cache: {
-    cacheLocation: "sessionStorage",
-    storeAuthStateInCookie: false
   }
 };
 
 const msalInstance = new msal.PublicClientApplication(msalConfig);
+
 
 // Always send the user-flow (policy) as p=…
 // Scopes are just OIDC for now.
@@ -212,3 +204,4 @@ signUp?.addEventListener('submit', (e) => {
  ********************/
 validateSignIn();
 validateSignUp();
+
