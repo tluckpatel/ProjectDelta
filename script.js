@@ -1,22 +1,30 @@
-// REPLACE your MSAL config with this:
+// ===== MSAL CONFIG (put authorityMetadata INSIDE auth) =====
 const msalConfig = {
   auth: {
     clientId: "a1c3f9fb-01d3-447e-a263-e4c754acc353",
     authority: "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/B2B_1_signup_signin",
     knownAuthorities: ["tshanesimmonsgmailauth.ciamlogin.com"],
-    redirectUri: "https://agreeable-flower-00cd2da0f.1.azurestaticapps.net"
-  },
-  authorityMetadata: JSON.stringify({
-    "issuer": "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/B2B_1_signup_signin/v2.0/",
-    "authorization_endpoint": "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/oauth2/v2.0/authorize?p=B2B_1_signup_signin",
-    "token_endpoint":         "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/oauth2/v2.0/token?p=B2B_1_signup_signin",
-    "end_session_endpoint":   "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/oauth2/v2.0/logout?p=B2B_1_signup_signin",
-    "jwks_uri":               "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/discovery/v2.0/keys?p=B2B_1_signup_signin"
-  })
+    redirectUri: "https://agreeable-flower-00cd2da0f.1.azurestaticapps.net",
+
+    // 👇 THIS MUST LIVE INSIDE `auth`
+    authorityMetadata: JSON.stringify({
+      "issuer": "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/B2B_1_signup_signin/v2.0/",
+      "authorization_endpoint": "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/oauth2/v2.0/authorize?p=B2B_1_signup_signin",
+      "token_endpoint":         "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/oauth2/v2.0/token?p=B2B_1_signup_signin",
+      "end_session_endpoint":   "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/oauth2/v2.0/logout?p=B2B_1_signup_signin",
+      "jwks_uri":               "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/discovery/v2.0/keys?p=B2B_1_signup_signin"
+    })
+  }
 };
 
 const msalInstance = new msal.PublicClientApplication(msalConfig);
 const loginRequest = { scopes: ["openid", "profile", "email"] };
+
+// Example usage:
+msalInstance.loginPopup(loginRequest)
+  .then(r => console.log("Signed in:", r.account?.username))
+  .catch(console.error);
+
 
 
 // ====== NAV / STAGE TOGGLE ======
@@ -162,6 +170,7 @@ signUp?.addEventListener('submit', (e) => {
     })
     .catch(err => console.error(err));
 });
+
 
 
 
