@@ -1,21 +1,19 @@
 // ===== MSAL CONFIG =====
-// ===== MSAL CONFIG =====
 const msalConfig = {
   auth: {
-    clientId: "a1c3f9fb-01d3-447e-a263-e4c754acc353",
-    authority: "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/B2B_1_signup_signin/v2.0",
+    clientId: "a1c3f9fb-01d3-447e-a263-e4c754acc353", // your app reg ID
+    authority: "https://tshanesimmonsgmailauth.ciamlogin.com/tshanesimmonsgmailauth.onmicrosoft.com/B2B_1_signup_signin", 
     knownAuthorities: ["tshanesimmonsgmailauth.ciamlogin.com"],
     redirectUri: "https://agreeable-flower-00cd2da0f.1.azurestaticapps.net"
   }
 };
-
-
 
 const msalInstance = new msal.PublicClientApplication(msalConfig);
 
 const loginRequest = {
   scopes: ["openid", "profile", "email"]
 };
+
 
 
 // ====== NAV / STAGE TOGGLE ======
@@ -161,6 +159,7 @@ signUp?.addEventListener('submit', (e) => {
     })
     .catch(err => console.error(err));
 });
+
 
 
 
